@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<import resource="classpath:com/wideo/metrics/core-context.xml" />
+	<import resource="classpath:com/wideo/metrics/freemarker-context.xml" />
+
+	<mvc:annotation-driven />
+
+	<context:component-scan base-package="com.wideo.metrics" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.wideo.metrics.interceptor.StaticResourcesInterceptor">
+				<property name="externalLibStaticUrl" value="${wideo.static.server.external}" />
+				<property name="wideoResourceStaticUrl" value="${wideo.static.server}" />
+				<property name="apiUrl" value="${api.url}" />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<!-- Json config -->
+	<bean name="jsonViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver" />
+</beans>

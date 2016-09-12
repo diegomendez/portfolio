@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+				
+	<!-- Freemarker configurer -->
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="preferFileSystemAccess" value="true" />
+		<property name="templateLoaderPaths">
+			<list>
+				<value>classpath:freemarker</value>
+				<value>file:///data/wideo.co/visual-content</value>
+				<value>/WEB-INF/templates</value>
+			</list>
+		</property>
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_exception_handler">${freemarker.template.exception.handler}</prop>
+				<prop key="number_format">####</prop>
+
+				<prop key="output_encoding">charset=UTF-8</prop>
+				<!-- head variable is override at w-head-layout.ftl but if doesnt exists import of head-layout, 
+				by default is spring.ftl -->
+				<prop key="auto_import">/spring.ftl as s</prop>
+				<prop key="output_encoding">UTF-8</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Default view resolver -->
+	<!-- TODO: CACHE EN TRUE!!!!! -->
+	<bean id="freeMarkerViewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="cache" value="false" />
+		<property name="prefix" value="" />
+		<property name="suffix" value=".ftl" />
+		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="exposeRequestAttributes" value="true" />
+		<property name="contentType" value="text/html;charset=UTF-8"/>
+		<property name="order">
+			<value>1</value>
+		</property>
+	</bean>
+
+
+
+	<!-- I18N spring message source -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<array>
+				<value>file:///data/wideo.co/visual-content/i18n/metrics_messages</value>
+			</array>
+		</property>
+		<property name="cacheSeconds" value="3600"/>
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+</beans>

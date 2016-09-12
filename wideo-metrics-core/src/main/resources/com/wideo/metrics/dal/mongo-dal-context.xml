@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/data/mongo
+    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+	<mongo:mongo id="mongo" host="${mongo.db.host}" port="${mongo.db.port}">
+		<mongo:options connections-per-host="${mongo.connections}"
+			auto-connect-retry="true" />
+	</mongo:mongo>
+
+	<bean id="morphia" class="com.github.jmkgreen.morphia.Morphia"></bean>
+
+	<bean id="eventTrackDalImpl" class="com.wideo.metrics.persistence.dal.EventTrackDalImpl">
+		<constructor-arg ref="mongo"></constructor-arg>
+		<constructor-arg value="${mongo.db.name}"></constructor-arg>
+		<constructor-arg value="${mongo.stats.db.name}"></constructor-arg>
+	</bean>
+	
+	<bean id="statsProcessingKeysDalImpl" class="com.wideo.metrics.persistence.dal.StatsProcessingKeysDalImpl">
+		<constructor-arg ref="mongo"></constructor-arg>
+		<constructor-arg ref="morphia"></constructor-arg>
+		<constructor-arg value="wideometrics-stats"></constructor-arg>
+	</bean>
+	
+	<bean id="statsPendingJobsDalImpl" class="com.wideo.metrics.persistence.dal.StatsPendingJobsDalImpl">
+		<constructor-arg ref="mongo"></constructor-arg>
+		<constructor-arg ref="morphia"></constructor-arg>
+		<constructor-arg value="wideometrics-stats"></constructor-arg>
+	</bean>
+
+	<bean id="statsProcessorDalImpl" class="com.wideo.metrics.persistence.dal.StatsProcessorDalImpl">
+		<constructor-arg ref="mongo"></constructor-arg>
+		<constructor-arg ref="morphia"></constructor-arg>
+		<constructor-arg value="wideometrics-test"></constructor-arg>
+	</bean>
+
+</beans>

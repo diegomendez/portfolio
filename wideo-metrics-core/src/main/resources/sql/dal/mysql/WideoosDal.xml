@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQLCacheQueryGroup>
+	<queryGroupName>WIDEOOS_DAL</queryGroupName>
+	<query>
+		<queryID>GET_CREATED_WIDEOOS_BY_DATERANGE_QUERY</queryID>
+		<queryText>
+				<![CDATA[
+				  SELECT COUNT(wid.wideoo_id)
+				   FROM wideoodb.wideoos wid
+				   WHERE DATE(wid.create_date) >= (:startDate) and DATE(create_date) <= (:endDate)
+				]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_CREATED_WIDEOOS_BY_DATERANGE_USERCATEGORIES_QUERY</queryID>
+		<queryText>
+				<![CDATA[
+				  SELECT COUNT(wid.wideoo_id)
+				   FROM wideoodb.wideoos wid JOIN users u
+				   WHERE wid.user_id = u.user_id  
+				   AND DATE(wid.create_date) >= (:startDate) and DATE(create_date) <= (:endDate)
+				   AND u.user_category IN (:userCategories)
+				]]>
+		</queryText>
+	</query>
+
+	
+	<query>
+		<queryID>GET_BEST_WIDEOS_BY_DATERANGE_QUERY</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT wideoo_id, score
+				FROM wideoodb.wideoos
+				WHERE DATE(create_date) >= ? AND DATE(create_date) <= ?
+				ORDER BY score DESC
+				LIMIT ?
+			]]>
+		</queryText>
+	</query>
+</SQLCacheQueryGroup>

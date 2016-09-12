@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- Server 1 -->
+	<bean id="wideooDatasourceProduccion" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${wideo.prod.db.host}?characterEncoding=UTF-8" />
+		<property name="user" value="${wideo.prod.db.user}" />
+		<property name="password" value="${wideo.prod.db.pass}" />
+<!-- 		<property name="initialPoolSize" value="${wideo.prod.db.maxPoolSize}"/> -->
+		<property name="maxPoolSize" value="${wideo.prod.db.maxPoolSize}" />
+		<property name="testConnectionOnCheckin" value="true" />
+		<property name="idleConnectionTestPeriod" value="${wideo.prod.db.idleConnectionTestPeriod}" />
+	</bean>
+
+	<!-- Server 2 -->
+	<bean id="wideooDatasourceProduccion2" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="${wideo.prod.2.db.host}?characterEncoding=UTF-8" />
+		<property name="user" value="${wideo.prod.2.db.user}" />
+		<property name="password" value="${wideo.prod.2.db.pass}" />
+<!-- 		<property name="initialPoolSize" value="${wideo.prod.db.maxPoolSize}"/> -->
+		<property name="maxPoolSize" value="${wideo.prod.2.db.maxPoolSize}" />
+		<property name="testConnectionOnCheckin" value="true" />
+		<property name="idleConnectionTestPeriod" value="${wideo.prod.2.db.idleConnectionTestPeriod}" />
+	</bean>
+
+	<!-- Local -->
+	<!-- <bean id="wideooDatasourceLocal" class="com.mchange.v2.c3p0.ComboPooledDataSource" -->
+	<!-- destroy-method="close"> -->
+	<!-- <property name="driverClass" value="com.mysql.jdbc.Driver" /> -->
+	<!-- <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/wideoodb" 
+		/> -->
+	<!-- <property name="user" value="root" /> -->
+	<!-- <property name="password" value="root" /> -->
+	<!-- <property name="maxPoolSize" value="100" /> -->
+	<!-- <property name="testConnectionOnCheckin" value="true" /> -->
+	<!-- <property name="idleConnectionTestPeriod" value="10" /> -->
+
+	<!-- </bean> -->
+
+	<!-- jdbcTemplate 2 -->
+	<bean id="wideooJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="wideooDatasourceProduccion" />
+	</bean>
+
+	<!-- jdbcTemplate 2 -->
+	<bean id="wideooJdbcTemplate2" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="wideooDatasourceProduccion2" />
+	</bean>
+
+	<!-- TM 1 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="wideooDatasourceProduccion" />
+	</bean>
+
+	<!-- TM 2 -->
+	<bean id="transactionManager2"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="wideooDatasourceProduccion2" />
+	</bean>
+
+</beans>

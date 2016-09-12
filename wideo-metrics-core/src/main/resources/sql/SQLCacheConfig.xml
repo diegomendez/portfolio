@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQLCacheConfig>
+	<hit_counter>Y</hit_counter>
+	<sql_path>sql/dal/mysql/WideoosDal.xml</sql_path>
+	<sql_path>sql/dal/mysql/UsersDal.xml</sql_path>
+	<sql_path>sql/dal/mysql/CheckOutDal.xml</sql_path>
+</SQLCacheConfig>

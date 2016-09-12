@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQLCacheQueryGroup>
+	<queryGroupName>CHECKOUT_DAL</queryGroupName>
+	<query>
+		<queryID>GET_PLANS_SOLD_BY_NAME_BY_DATERANGE</queryID>
+		<queryText>
+				<![CDATA[
+				  SELECT ch.charge_name AS charge_name, count(uc.charge_type_id) AS chargeSoldPlansCount 
+				  FROM user_charge_type AS uc JOIN charge_types AS ch
+				  WHERE uc.charge_type_id=ch.charge_type_id
+					AND DATE(uc.purchase_date) >= ? and DATE(uc.purchase_date)<= ?
+					AND uc.charge_type_id != 18
+				  GROUP BY ch.charge_name
+				]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_REVENUE</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT SUM(d.total_amount)
+				FROM documents as d JOIN users as u
+				WHERE u.email NOT LIKE '%@wideotest.co%'
+				AND u.user_id=d.user_id
+				AND DATE(d.doc_date) >= ? AND DATE(d.doc_date) <= ?
+			]]>
+		</queryText>
+	</query>
+
+
+	<query>
+		<queryID>GET_RECCURENT_PLANS_SOLD</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT COUNT(pp.id) FROM 
+				process_payment AS pp JOIN users AS u 
+				WHERE pp.status='DONE' 
+				AND DATE(pp.update_date) >= ? AND DATE(pp.update_date) <= ?
+				AND pp.charge_type_id != '18' 
+				AND pp.user_id=u.user_id 
+				AND u.email NOT LIKE '%@wideotest.co%'
+			]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_RECURRENT_PLANS_BY_IDS_SOLD</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT COUNT(pp.id) FROM 
+				process_payment AS pp JOIN users AS u 
+				WHERE pp.status='DONE' 
+				AND DATE(pp.update_date) >= (:startDate) AND DATE(pp.update_date) <= (:endDate)
+				AND pp.charge_type_id in (:chargeTypesIds)
+				AND pp.user_id=u.user_id 
+				AND u.email NOT LIKE '%@wideotest.co%'
+			]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_PLANS_SOLD</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT COUNT(d.document_id) 
+				FROM documents d, user_charge_type uc, users u
+				WHERE DATE(uc.purchase_date) >= (:startDate) AND DATE(uc.purchase_date) <= (:endDate)
+				AND DATE(d.doc_date) >= (:startDate) AND DATE(d.doc_date) <= (:endDate) 
+				AND uc.charge_type_id IN (:chargeTypesIds)
+				AND uc.user_id=d.user_id AND uc.user_id=u.user_id 
+				AND u.email not like '%@wideotest.co%'
+			]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_DISTINCT_PAID_USERS</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT COUNT(DISTINCT uc.user_id)
+				FROM user_charge_type AS uc JOIN users AS u
+				WHERE u.email NOT LIKE '%@wideotest.co'
+				AND DATE(uc.purchase_date) >= ?
+				AND DATE(uc.purchase_date) <= ?
+				AND uc.charge_type_id != 18
+			]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_REVENUE_FOR_USERS</queryID>
+		<queryText>
+			<![CDATA[
+			SELECT SUM(d.total_amount)
+			FROM documents d
+			WHERE DATE(d.doc_date) >= (:startDate)
+			AND DATE(d.doc_date) <= (:endDate)
+			AND d.user_id IN (:userIDs)
+			]]>
+		</queryText>
+	</query>
+	
+</SQLCacheQueryGroup>
+	

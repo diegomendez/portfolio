@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SQLCacheQueryGroup>
+	<queryGroupName>WIDEOOS_DAL</queryGroupName>
+	<query>
+		<queryID>GET_SIGNUPS_BY_DATERANGE_USERCATEGORIES_QUERY</queryID>
+		<queryText>
+				<![CDATA[
+				  SELECT COUNT(u.user_id)
+				   FROM wideoodb.users u
+				   WHERE DATE(u.registration_date) >= :startDate and DATE(u.registration_date) <= (:endDate)
+				   AND u.user_category IN (:userCategories)
+				]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_SIGNUPS_BY_DATERANGE_QUERY</queryID>
+		<queryText>
+				<![CDATA[
+				  SELECT COUNT(u.user_id)
+				   FROM wideoodb.users u
+				   WHERE DATE(u.registration_date) >= :startDate and DATE(u.registration_date) <= :endDate
+				]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_SIGNUPS_BY_DATERANGE_BY_USER_CATEGORY_QUERY</queryID>
+		<queryText>
+				<![CDATA[
+				  SELECT u.user_category as user_category, COUNT(u.user_id) as signups
+				   FROM wideoodb.users u
+				   WHERE DATE(u.registration_date) >= ? AND DATE(u.registration_date) <= ?
+				   GROUP BY u.user_category
+				]]>
+		</queryText>
+	</query>
+
+	<query>
+		<queryID>GET_TODAY_SIGNUPS</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT COUNT(user_id)
+				FROM wideoodb.users
+				WHERE email NOT LIKE '%@wideotest.co%' AND DATE(registration_date) = CURDATE()
+			]]>
+		</queryText>
+	</query>
+	
+	<query>
+		<queryID>GET_SIGNUPS_FROM_LIST</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT user_id
+				FROM wideoodb.users
+				WHERE user_id IN (:userIDs) 
+				AND registration_date >= (:startDate) 
+				AND registration_date <= (:endDate)	 
+			]]>
+		</queryText>
+	</query>	
+
+	<query>
+		<queryID>GET_SIGNUPS_BY_USERCATEGORY_FROM_LIST</queryID>
+		<queryText>
+			<![CDATA[
+				SELECT user_id
+				FROM wideoodb.users
+				WHERE user_id in (:userIDs) 
+				AND registration_date >= (:startDate) 
+				AND registration_date <= (:endDate)
+				AND user_category IN (:userCategories)	 
+			]]>
+		</queryText>
+	</query>	
+		
+		
+</SQLCacheQueryGroup>
